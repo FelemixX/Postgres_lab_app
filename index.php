@@ -11,8 +11,7 @@
                             <label for="user_login text-center" class="form-label">
                                 Логин
                             </label>
-                            <input name="user_login" required type="text" class="form-control" id="user_login"
-                                   aria-describedby="user login" placeholder="admin">
+                            <input name="user_login" required type="text" class="form-control" id="user_login" aria-describedby="user login" placeholder="admin">
                         </div>
                         <div class=" mb-3">
                             <label for="user_password" class="form-label">
@@ -24,7 +23,7 @@
                             <button type="submit" class="btn btn-dark mr-3">
                                 Войти
                             </button>
-                            <a type="submit" class="d-inline-block btn btn-secondary" href="/auth/register_page.php">
+                            <a type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#register-modal">
                                 Регистрация
                             </a>
                         </div>
@@ -45,4 +44,10 @@
             </div>
         </div>
     </div>
+<?php require_once 'template/js/index/register_modal.php' ?>
 <?php require_once 'template/footer.php'?>
+
+<script type="text/javascript" src="template/js/index/index.js" defer>
+    let registerModal = new RegisterModal();
+    registerModal.initHandlers()
+</script>
