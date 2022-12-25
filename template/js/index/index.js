@@ -1,4 +1,4 @@
-class RegisterModal
+class Register_Modal
 {
     constructor() {
         this.xhr = new XMLHttpRequest();
@@ -12,8 +12,7 @@ class RegisterModal
     }
 
     initHandlers () {
-        console.log(1)
-        this.registerModal.addEventListener('hidde.bs.modal', this.onModalClose.bind(this));
+        this.registerModal.addEventListener('hidden.bs.modal', this.onModalClose.bind(this));
         this.registerBtn.addEventListener('click', this.onRegister.bind(this));
     }
 

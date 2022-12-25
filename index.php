@@ -47,7 +47,7 @@
 <?php require_once 'template/js/index/register_modal.php' ?>
 <?php require_once 'template/footer.php'?>
 
-<script type="text/javascript" src="template/js/index/index.js" defer>
-    let registerModal = new RegisterModal();
-    registerModal.initHandlers()
+<script type="text/javascript" src="template/js/index/index.js"></script>
+<script>
+    let registerModal = new Register_Modal();
 </script>
