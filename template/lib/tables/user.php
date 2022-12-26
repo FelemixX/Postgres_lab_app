@@ -3,10 +3,8 @@ require_once '../main_class.php';
 
 class User extends Main_Class
 {
-    protected $tableName = "user";
-    private $login, $password, $userName, $userEmail;
-    public $isAdmin;
-
+    protected $tableName = "user", $isAdmin;
+    public $login, $password, $userName, $userEmail;
 
     /**
      * @param string $sort
@@ -60,11 +58,6 @@ class User extends Main_Class
     public function registerUser(): bool
     {
         try {
-//            if (!filter_var($this->userEmail, FILTER_VALIDATE_EMAIL) ||
-//                preg_match()!$this->userName || !$this->password || !$this->userName || !$this->userEmail) {
-//                return false;
-//            }
-
             $passwordHash = password_hash($this->password, PASSWORD_DEFAULT);
 
             $query = "INSERT INTO $this->tableName (`login`, `password`, `user_name`, 'user_email') VALUES(?, ?, ?, ?)";
@@ -99,9 +92,10 @@ class User extends Main_Class
                     static::logout();
                     session_start();
 
-                    $_SESSION["USER_NAME"] = $stmt["user_name"];
-                    $_SESSION["USER_EMAIL"] = $stmt["user_email"];
-                    $_SESSION["USER_ID"] = $stmt["id"];
+                    $_SESSION['AUTHORIZED'] = true;
+                    $_SESSION['USER_NAME'] = $stmt['user_name'];
+                    $_SESSION['USER_EMAIL'] = $stmt['user_email'];
+                    $_SESSION['USER_ID'] = $stmt['id'];
 
                     if ($stmt['is_admin']) {
                         $_SESSION['IS_ADMIN'] = true;
