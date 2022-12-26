@@ -4,10 +4,14 @@ require_once 'main.php';
 class User extends Main_Class
 {
     protected $tableName = "user";
-    private $login, $password, $userName;
+    private $login, $password, $userName, $userEmail;
     public $isAdmin;
 
 
+    /**
+     * @param string $sort
+     * @return mixed
+     */
     public function read(string $sort): mixed
     {
         try {
@@ -26,10 +30,13 @@ class User extends Main_Class
         }
     }
 
-    function update()
+    /**
+     * @return bool
+     */
+    public function update(): bool
     {
         try {
-            $query = "UPDATE " . $this->tableName . " SET `login` = ?, `user_name` = ? WHERE " . $this->tableName . " .`id` = ?";
+            $query = "UPDATE " . $this->tableName . " SET `login` = ?, `user_name` = ?, `user_email` = ? WHERE " . $this->tableName . " .`id` = ?";
 
             $stmt = $this->conn->prepare($query);
 
@@ -47,15 +54,22 @@ class User extends Main_Class
         }
     }
 
+    /**
+     * @return bool
+     */
     public function registerUser(): bool
     {
         try {
+            if (!filter_var($this->userEmail, FILTER_VALIDATE_EMAIL)) {
+                return false;
+            }
+
             $passwordHash = password_hash($this->password, PASSWORD_DEFAULT);
 
-            $query = "INSERT INTO $this->tableName (`login`, `password`, `user_name`) VALUES(?, ?, ?)";
+            $query = "INSERT INTO $this->tableName (`login`, `password`, `user_name`, 'user_email') VALUES(?, ?, ?, ?)";
             $stmt = $this->conn->prepare($query);
 
-            if ($stmt->execute([$this->login, $passwordHash, $this->userName])) {
+            if ($stmt->execute([$this->login, $passwordHash, $this->userName, $this->userEmail])) {
                 return true;
             } else {
                 return false;
@@ -65,10 +79,13 @@ class User extends Main_Class
         }
     }
 
+    /**
+     * @return bool
+     */
     public function authorizeUser(): bool
     {
         try {
-            $query = "SELECT * FROM $this->tableName WHERE login = '$this->login'";
+            $query = "SELECT * FROM $this->tableName WHERE login = '$this->login' OR user_email = '$this->userEmail'";
 
             $stmt = $this->conn->prepare($query);
             $stmt->execute();
@@ -81,7 +98,8 @@ class User extends Main_Class
                     static::logout();
                     session_start();
 
-                    $_SESSION["USER_NAME"] = $stmt["name"];
+                    $_SESSION["USER_NAME"] = $stmt["user_name"];
+                    $_SESSION["USER_EMAIL"] = $stmt["user_email"];
                     $_SESSION["USER_ID"] = $stmt["id"];
 
                     if ($stmt['is_admin']) {
@@ -99,6 +117,9 @@ class User extends Main_Class
         }
     }
 
+    /**
+     * @return void
+     */
     public static function logout(): void
     {
         try {
@@ -116,10 +137,14 @@ class User extends Main_Class
         }
     }
 
+    /**
+     * Check if user with the same login are already exists
+     * @return bool
+     */
     public function userExists(): bool
     {
         try {
-            $query = "SELECT login FROM $this->tableName WHERE login LIKE '$this->login'";
+            $query = "SELECT login FROM $this->tableName WHERE login = '$this->login' OR user_email = '$this->userEmail'";
 
             $stmt = $this->conn->prepare($query);
             $stmt->execute();
