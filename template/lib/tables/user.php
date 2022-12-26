@@ -1,5 +1,5 @@
 <?php
-require_once 'main_class.php';
+require_once '../main_class.php';
 
 class User extends Main_Class
 {
@@ -60,9 +60,10 @@ class User extends Main_Class
     public function registerUser(): bool
     {
         try {
-            if (!filter_var($this->userEmail, FILTER_VALIDATE_EMAIL)) {
-                return false;
-            }
+//            if (!filter_var($this->userEmail, FILTER_VALIDATE_EMAIL) ||
+//                preg_match()!$this->userName || !$this->password || !$this->userName || !$this->userEmail) {
+//                return false;
+//            }
 
             $passwordHash = password_hash($this->password, PASSWORD_DEFAULT);
 
