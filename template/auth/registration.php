@@ -1,7 +1,7 @@
 <?php
 header('Location: /404.php/');
 
-if (!isset($_POST['user_login_register_modal']) || isset($_POST['user_email_register_modal']) || isset($_POST['user_password_register_modal']) || isset($_POST['user_password_repeated_register_modal'])) {
+if (!isset($_POST['user_login_register_modal']) || !isset($_POST['user_email_register_modal']) || !isset($_POST['user_password_register_modal']) || !isset($_POST['user_password_repeated_register_modal'])) {
     throw new Exception('Что-то пошло не так, попробуйте еще раз');
 }
 
@@ -11,6 +11,10 @@ if ($_POST['user_password_register_modal'] != $_POST['user_password_repeated_reg
 
 if (!filter_var($_POST['user_email_register_modal'], FILTER_VALIDATE_EMAIL)) {
     throw new Exception('Неверно задан email');
+}
+
+if(!preg_match('^[A-Za-z0-9]+([A-Za-z0-9]*|[._-]?[A-Za-z0-9]+)*$', $_POST['user_login_register_modal'])) {
+    throw new Exception('Неверно задан логин');
 }
 
 $userLogin = htmlspecialchars($_POST['user_login_register_modal']);
