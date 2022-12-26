@@ -1,5 +1,5 @@
 <?php
-require_once 'main.php';
+require_once 'main_class.php';
 
 class User extends Main_Class
 {
