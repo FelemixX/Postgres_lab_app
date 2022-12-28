@@ -1,3 +1,4 @@
+/.idea/codeStyles/codeStyleConfig.xml
 # Default ignored files
 /shelf/
 /workspace.xml
@@ -10,3 +11,5 @@
 vcs.xml
 modules.xml
 localhost.iml
+/git_toolbox_prj.xml
+/dataSources.xml
