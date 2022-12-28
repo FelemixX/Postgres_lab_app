@@ -1,5 +1,4 @@
-class Register_Modal
-{
+class Register_Modal {
     constructor() {
         this.xhr = new XMLHttpRequest();
 
@@ -11,20 +10,27 @@ class Register_Modal
         this.initHandlers()
     }
 
-    initHandlers () {
+    initHandlers() {
         this.registerModal.addEventListener('hidden.bs.modal', this.onModalClose.bind(this));
-        this.registerBtn.addEventListener('click', this.onRegister.bind(this));
+        this.registerBtn.addEventListener('click', this.registerButtonClick.bind(this));
     }
 
-    onModalClose () {
+    registerButtonClick() {
+        const xhr = new XMLHttpRequest();
+
+        xhr.open('POST', 'template/auth/registration.php');
+        xhr.onload = () => {
+
+        };
+    }
+
+    onModalClose() {
         this.registerModalForm.reset()
     }
 
-    onRegister () {
+    onRegister() {
         $('#register-modal').modal('hide');
         this.registerModalForm.reset();
-
-        // this.xhr.open();
     }
 
 
