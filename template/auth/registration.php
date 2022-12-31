@@ -1,6 +1,6 @@
 <?php
-header('Location: /404.php/');
-
+//header('Location: /404.php/');
+echo var_dump($_POST);
 if (!isset($_POST['user_login_register_modal']) || !isset($_POST['user_email_register_modal']) || !isset($_POST['user_password_register_modal']) || !isset($_POST['user_password_repeated_register_modal'])) {
     throw new Exception('Что-то пошло не так, попробуйте еще раз');
 }
@@ -24,14 +24,18 @@ $userPassword = htmlspecialchars($_POST['user_password_register_modal']);
 include_once 'template/lib/tables/user.php';
 include_once 'template/lib/database.php';
 
-$db = new Database();
-$conn = $db->getConnection();
+try {
+    $db = new Database();
+    $conn = $db->getConnection();
 
-$user = new User($conn);
+    $user = new User($conn);
 
-$user->userLogin = $userLogin;
-$user->userEmail = $userEmail;
-$user->userPassword = $userPassword;
+    $user->userLogin = $userLogin;
+    $user->userEmail = $userEmail;
+    $user->userPassword = $userPassword;
+} catch (Exception $e) {
+    $e = $e->getMessage();
+}
 
 if (!$user->registerUser()) {
     throw new Exception('Не удалось зарегистрироваться, попробуйте еще раз');

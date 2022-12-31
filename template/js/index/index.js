@@ -1,7 +1,5 @@
 class Register_Modal {
     constructor() {
-        this.xhr = new XMLHttpRequest();
-
         this.registerModal = document.getElementById('register-modal');
         this.registerModalForm = document.getElementById('register-form');
         this.registerBtn = document.getElementById('modal-register-btn');
@@ -11,17 +9,31 @@ class Register_Modal {
     }
 
     initHandlers() {
+        this.registerBtn
         this.registerModal.addEventListener('hidden.bs.modal', this.onModalClose.bind(this));
         this.registerBtn.addEventListener('click', this.registerButtonClick.bind(this));
     }
 
     registerButtonClick() {
-        const xhr = new XMLHttpRequest();
+        this.registerModalForm.querySelectorAll('input').forEach((element) => {
+            const inputName = element.getAttribute('name');
+            const inputValue = element.value;
+            inputsValues.push({inputName: inputValue});
 
-        xhr.open('POST', 'template/auth/registration.php');
-        xhr.onload = () => {
-
-        };
+        });
+        console.log(inputsValues);
+        fetch('template/auth/registration.php',
+            {
+                method: 'POST',
+                body: JSON.stringify(inputsValues),
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            }).then(
+            response => response.json()
+        ).then(
+            response => console.log(response)
+        );
     }
 
     onModalClose() {
