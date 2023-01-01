@@ -15,24 +15,24 @@ class Register_Modal {
     }
 
     registerButtonClick() {
+        let inputsValues = new FormData();
+
         this.registerModalForm.querySelectorAll('input').forEach((element) => {
             const inputName = element.getAttribute('name');
-            const inputValue = element.value;
-            inputsValues.push({inputName: inputValue});
-
+            inputsValues.append(inputName, element.value);
         });
-        console.log(inputsValues);
-        fetch('template/auth/registration.php',
+
+        fetch('/template/auth/registration.php',
             {
                 method: 'POST',
-                body: JSON.stringify(inputsValues),
+                body: inputsValues,
                 headers: {
                     'Content-Type': 'application/json'
                 },
             }).then(
-            response => response.json()
+            response => this.onRegister()
         ).then(
-            response => console.log(response)
+            error => console.log(error)
         );
     }
 
