@@ -1,11 +1,13 @@
 <?php
-require_once '../main_class.php';
+include_once  $_SERVER['DOCUMENT_ROOT'] . '/template/lib/main_class.php';
 
 class User extends Main_Class
 {
-    protected $tableName = "user", $isAdmin;
-    public $login, $password, $userName, $userEmail;
+    protected $tableName = "users";
+    protected $isAdmin;
+    public $login, $password, $name, $email;
 
+    public const REGISTRATION_QUERY_NAME = 'register';
     /**
      * @param string $sort
      * @return mixed
@@ -60,16 +62,16 @@ class User extends Main_Class
         try {
             $passwordHash = password_hash($this->password, PASSWORD_DEFAULT);
 
-            $query = "INSERT INTO $this->tableName (`login`, `password`, `user_name`, 'user_email') VALUES(?, ?, ?, ?)";
-            $stmt = $this->conn->prepare($query);
+            $query = "INSERT INTO $this->tableName (login, password, user_name, user_email) VALUES ($1, $2, $3, $4)";
+            $stmt = pg_prepare($this->conn, static::REGISTRATION_QUERY_NAME, $query);
 
-            if ($stmt->execute([$this->login, $passwordHash, $this->userName, $this->userEmail])) {
+            if (pg_execute($this->conn, static::REGISTRATION_QUERY_NAME, [$this->login, $passwordHash, $this->name, $this->email])) {
                 return true;
             } else {
                 return false;
             }
         } catch (Exception $exception) {
-            return false;
+            echo $exception->getMessage();
         }
     }
 
